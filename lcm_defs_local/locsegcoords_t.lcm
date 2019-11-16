@@ -1,0 +1,42 @@
+package exlcm;
+
+// Note: All sepecific parameters are now available in Localization_t!!!
+
+struct locsegcoords_t
+{
+	// Common elements
+    const int8_t VERSION_N = 2; // Increment for every structural changes for this LCM data type (i.e. when fingreprint changes)
+	int8_t valid_f;
+	int8_t version_n;
+	int16_t rolling_count;	    // should increment with every publication; if part of a set, the message specific items should have something like 'frame_count'
+	double timestamp_sec;
+	int64_t ref_n;
+
+    // LocCoords_t elements
+    int64_t laneseg_uid;
+    double  along_m;    // how far along the nominal path centerline (projected perpendicularly if considering an offset point)
+    
+    double  offset_m;   // lateral displacement from nominal path centerline, positive if point is left of nominal path centerline, negative if right of it
+    
+    double  seg_fr;     // real number mapped to 0.0 at the first point of the segment to 1.0 at the last point (before any connection points)
+                        //  Examples: 0.6 = point that is 60% of the way downrange from the first waypoint in segment to the last waypoint
+                        //            1.1 = point 10% _past_ the last regular waypoint (but perhaps on a connection in a junction)
+                        //           -0.2 = point 20% _before the first waypoint in comparison to distance from first to last regular waypoint
+    
+    double  point_fr;   // real number where integer portion is the waypoint index number and th fractional part 
+                        //  is the fraction of the space between the current and next waypoint.
+                        //  Examples: 0.5 = Point half-way between waypoint 0 and waypoint 1 of segment;
+                        //            4.1 = Point 10% of distance between waypoint 4 (fifth point) and waypoint 5 (sixth); i.e. much closer to waypoint 4
+                        //           -0.5 = Point _before_ waypoint 0 a distance equal to half the distance between waypoint 0 and waypoint 1  
+                        
+    int32_t  conn_n;     // connection index, 0 to N, (-1 if before the first waypoint, 0 if not in a connection _or_in the first connection, check seg_fr and/or point_fr to see which)
+    
+	// Additional common elements
+	int8_t   scratch_byte1;	// 'scratch_...' freely-usable values of various sizes; check with publisher for current usage, if any
+	int8_t   scratch_byte2;	
+	int16_t  scratch_short;
+	int32_t  scratch_int1;
+	int32_t  scratch_int2;
+	double   scratch_real1;
+	double   scratch_real2;
+}

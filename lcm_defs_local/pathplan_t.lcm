@@ -1,0 +1,53 @@
+package exlcm;
+
+struct pathplan_t {
+	// Common elements
+    const int8_t VERSION_N = 2; // Increment for every structural changes for this LCM data type (i.e. when fingreprint changes)
+	int8_t valid_f;
+	int8_t version_n;
+	int16_t rolling_count;	    // should increment with every publication; if part of a set, the message specific items should have something like 'frame_count'
+	double timestamp_sec;
+	int64_t ref_n;
+    
+	int8_t reroute_status;
+	double normalized_cost; // -1 to 1.
+		
+	double gen_time_sec;	
+	double start_latitude_deg;
+	double start_longitude_deg;
+	double start_odometer_m;
+	double end_latitude_deg;
+	double end_longitude_deg;
+	double end_odometer_estimate_m;
+	int8_t destination_included; // Data dictionary asks to allot 2 bytes. Default size of bool is 1 byte
+	int32_t total_step_count;
+	int32_t starting_step_index_n;
+	int32_t included_step_count;
+	pathstep_t path_steps[included_step_count];
+
+	// Additional common elements
+	int8_t   scratch_byte1;	// 'scratch_...' freely-usable values of various sizes; check with publisher for current usage, if any
+	int8_t   scratch_byte2;	
+	int16_t  scratch_short;
+	int32_t  scratch_int1;
+	int32_t  scratch_int2;
+	double   scratch_real1;
+	double   scratch_real2;
+}
+
+struct pathstep_t {
+	int32_t step_index_n;
+	int16_t current_segment_group; //The corresponding list of lane segment uids can be found through routesegmentlist.
+	int16_t which_lane_n;
+	int16_t step_task;// Data dictionary asks to allot 2 bytes. Default size of enum is 4 bytes
+	int16_t step_rule;
+	float min_time_to_destination_s;  // Assumimg HV travels at full speed and doesn't slow down for rules. An Estimate of route cost.
+	float posted_speed_lim_mps;
+	float average_driven_speed_mps;
+	int16_t target_segment_group; //The corresponding list of lane segment uids can be found through routesegmentlist.
+	int16_t target_lane_n;
+	float current_segment_station_m;
+	float target_segment_station_m;
+	float turn_angle_rad;
+	int16_t direction;
+}

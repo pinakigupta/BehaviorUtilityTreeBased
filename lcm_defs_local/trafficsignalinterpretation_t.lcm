@@ -1,0 +1,35 @@
+package exlcm;
+
+struct trafficsignalinterpretation_t 
+{
+	// Common elements
+    const int8_t VERSION_N = 2; // Increment for every structural changes for this LCM data type (i.e. when fingreprint changes)
+	int8_t valid_f;
+	int8_t version_n;
+	int16_t rolling_count;	    // should increment with every publication; if part of a set, the message specific items should have something like 'frame_count'
+	double timestamp_sec;
+	int64_t ref_n;
+
+    //  specific elements
+    int32_t  maplet_iteration_n;    
+    int64_t  intersection_uid;
+
+    int16_t connection_count;
+    connectiontrafficsignal_t connection_traffic_signal_state[connection_count];
+
+
+}
+
+struct connectiontrafficsignal_t	{
+    	int64_t incoming_laneseg_uid;
+    	int16_t connection_n;
+    	int8_t content_validity;            // bitfield 1 = signal state valid, 2 = time in phase valid, 4 = remaining time valid (any combination of these bits)    
+    	int8_t signal_state[3];             // see eTrafficSignalState, up to three possible states, most likely in index [0], next most likely in [1], least likely in [2]
+	int8_t signal_probability[3];       // scaled probably from 0.0 (0) to 1.0 (255) for three most likely signal states <<< NOTE WE TREAT int8_t VALUE AS UNSIGNED
+	float time_in_phase_sec;            // how long it has been in the current phase 
+	float remaining_time_in_phase_sec;  // how long the current phase will last before next phase 
+ 	float restriction_station_m_start;
+	float restriction_station_m_end;
+
+}
+

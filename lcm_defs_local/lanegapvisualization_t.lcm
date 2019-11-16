@@ -1,0 +1,41 @@
+package exlcm;
+// MAL 2017-04-26
+
+struct lanegapvisualization_t
+{
+//  common elements
+    int16_t  entity_type;           // = 36 for VisualizerNotification
+    int8_t   version_n;             // version number of data entity type
+    boolean  valid_f;               // whether author thinks entity is currently valid
+    int64_t  ref_n;                 // cookie used between user code and plumbing code
+    double   timestamp_sec;         // when authored (entire data structure, some sub-groups of data have their own timestamps)
+
+// unique data
+
+	behaviorlanegapsviz_t Current_Lane_Pred_Gap; // Predicted (vector of) gaps for the current (HV) lane 
+	behaviorlanegapsviz_t Target_Lane_Pred_Gap; // Predicted (vector of) gaps for the target (HV) lane 
+
+	behaviorlanegapsviz_t All_Current_Lane_Gaps; // All gaps for the current lane  (at current Time)
+	behaviorlanegapsviz_t All_Target_Lane_Gaps; // All gaps for the Target lane (at current Time)
+
+}
+
+struct behaviorlanegapsviz_t
+{
+       int8_t  gap_count;
+       behaviorgapviz_t  LaneGaps[gap_count];
+}
+
+struct behaviorgapviz_t
+{
+       float  gap_pred_time;
+       float  gap_start;
+       float  gap_end;
+       float  gap_start_vel;
+       float  gap_end_vel;
+       float  gap_start_accel;
+       float  gap_end_accel;
+       float  gap_cost;
+}
+
+

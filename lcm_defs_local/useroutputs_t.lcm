@@ -1,0 +1,35 @@
+package exlcm;
+// MAL 2017-03-23
+
+struct useroutputs_t
+{
+	// Common elements
+    const int8_t VERSION_N = 2; // Increment for every structural changes for this LCM data type (i.e. when fingreprint changes)
+	int8_t valid_f;
+	int8_t version_n;
+	int16_t rolling_count;	    // should increment with every publication; if part of a set, the message specific items should have something like 'frame_count'
+	double timestamp_sec;
+	int64_t ref_n;
+
+// unique data
+    int16_t autonomous_mode_state;      // Same as system state?
+    int8_t turn_indication_request;     // 0 = no request, 1 = left blinker, 2 = right blinker, 3 = emergency blinkers	
+    int8_t horn_request;                // 0 = no sound, 1 = default sound
+    int64_t current_lane_segment_uid;   // 0 = no active route, > 0 = which element of map we are driving in
+    int64_t next_lane_segment_uid;      // 0 = no active route or near destination, > 0 = where we plan to go next
+    int16_t current_maneuver_task;      // See route_step_task_enum, What we are trying to do now
+    int16_t current_maneuver_direction; // See direction_enum, What direction we are trying to go
+    int16_t next_maneuver_task;         // See route_step_task_enum, What we will try to do next
+    int16_t next_maneuver_direction;    // See route_step_task_enum, What direction the next step will go
+    float   target_speed_mps;           // target speed in meters / second
+    int32_t primary_target_object_id;    // Which object in FusionObjectList is the most significant threat/impediment
+
+    // Additional common elements
+	int8_t   scratch_byte1;	// 'scratch_...' freely-usable values of various sizes; check with publisher for current usage, if any
+	int8_t   scratch_byte2;	
+	int16_t  scratch_short;
+	int32_t  scratch_int1;
+	int32_t  scratch_int2;
+	double   scratch_real1;
+	double   scratch_real2;
+}

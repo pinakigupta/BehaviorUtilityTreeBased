@@ -1,0 +1,29 @@
+package exlcm;
+
+struct visualizernotification_t
+{
+	// Common elements
+    const int8_t VERSION_N = 2; // Increment for every structural changes for this LCM data type (i.e. when fingreprint changes)
+	int8_t valid_f;
+	int8_t version_n;
+	int16_t rolling_count;	    // should increment with every publication; if part of a set, the message specific items should have something like 'frame_count'
+	double timestamp_sec;
+	int64_t ref_n;
+
+    // unique data
+    int8_t notification_id;         // unique ID for this notification; if later sent from the same requestor with no emblem and empty text, the notification should be cleared immediately
+    int8_t requestor_module_id;     // eModuleID enum; who is making the notification request (Might use to filter subsets of notifications)
+    int8_t sort_order;              // where in the list it should appear, 0 being the first (top) and higher sort numbers lower on the GUI screen,
+                                    //     if two or more are the same, sort by timestamp with newer on top?
+    int8_t notification_emblem;     // 0 = no/generic emblem; 1 = (something... initial list TBD)
+    int8_t notification_text[140];  // Text character string (null terminate!) 
+    
+    // Additional common elements
+	int8_t   scratch_byte1;	// 'scratch_...' freely-usable values of various sizes; check with publisher for current usage, if any
+	int8_t   scratch_byte2;	
+	int16_t  scratch_short;
+	int32_t  scratch_int1;
+	int32_t  scratch_int2;
+	double   scratch_real1;
+	double   scratch_real2;
+}

@@ -1,0 +1,31 @@
+package exlcm;
+
+struct localization_t
+{
+	// Common elements
+    const int8_t VERSION_N = 2; // Increment for every structural changes for this LCM data type (i.e. when fingreprint changes)
+	int8_t valid_f;
+	int8_t version_n;
+	int16_t rolling_count;	    // should increment with every publication; if part of a set, the message specific items should have something like 'frame_count'
+	double timestamp_sec;
+	int64_t ref_n;
+
+    // Localization elements
+    int32_t maplet_iteration_n;
+    float localization_confidence_fr;
+    int16_t localization_sources;
+    
+    // Segment and parameters from SegCoords
+    int64_t matched_laneseg_uid;
+    float matched_lane_station_m;           // aka SegCoords_t.along_m
+    float matched_lane_lateral_offset_m;    // aka SegCoords_t.offset_m
+    float matched_lane_misalign_rad;
+    float matched_seg_fr;                   // aka SegCoords_t.seg_fr
+    float matched_point_fr;                 // aka SegCoords_t.point_fr
+    
+    int64_t matched_intersection_uid;
+    float dist_to_matched_intersection_m;
+    int8_t inside_intersection_f;
+    int8_t matched_conn_n;                   // aka SegCoords_t.conn_n
+    
+}

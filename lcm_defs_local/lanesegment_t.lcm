@@ -1,0 +1,118 @@
+package exlcm;
+
+struct lanesegment_t
+{
+	// Common elements
+    const int8_t VERSION_N = 2; // Increment for every structural changes for this LCM data type (i.e. when fingreprint changes)
+	int8_t valid_f;
+	int8_t version_n;
+	int16_t rolling_count;	    // should increment with every publication; if part of a set, the message specific items should have something like 'frame_count'
+	double timestamp_sec;
+	int64_t ref_n;
+
+    int32_t maplet_iteration_n;
+    int64_t uid;
+    int8_t lane_index;
+    int8_t road_type; //of enum type
+    float length_m;
+    int8_t lane_width_count;
+    lanewidth_t lane_width[lane_width_count];
+
+    float posted_speed_lim_mps;
+    float average_driven_speed_mps;
+    int8_t lane_flow_restriction_count;
+//  laneflowrestriction_t lane_flow_restriction[lane_flow_restriction_count];
+
+    int8_t cross_traffic_type; //of type eCrossTrafficType
+    float creep_dist_after_stop_m;
+    int8_t nominal_path_waypoint_count;
+    waypoint_t nominal_path_waypoint[nominal_path_waypoint_count]; //Waypoint_t
+
+//    int8_t lane_marks_valid_f;
+//    int8_t left_edge_set_count;
+//  edgeset_t left_edge_set[left_edge_set_count];
+    int8_t right_edge_set_count;
+//  edgeset_t right_edge_set[right_edge_set_count];
+
+    int8_t primary_prev_connection_n;
+    int8_t primary_next_connection_n;
+    int8_t left_parallel_connection_n;
+    int8_t right_parallel_connection_n;
+    int64_t intersection_uid;
+    int8_t connection_count;
+    connection_t connection[connection_count];
+
+//    int16_t related_object_count;
+//    int64_t related_object_uid[related_object_count];
+
+//    int8_t provenance;  // source of the lanesegment data
+    
+}
+
+struct waypoint_t
+{	
+    float station_m;    // accumulated distance from start of segment
+    float east_m;
+	float north_m;
+	float up_m;
+    float heading_deg;
+	float v_mps;
+	float curve_im;
+	float grade_rad;
+	float bank_rad;
+}
+
+struct edgeset_t
+{
+    int8_t edge_type; //eEdgeType
+    int8_t  edge_point_count;
+    point_enu_t edge_points[10];
+}
+
+struct point_enu_t
+{
+	float east_m;
+	float north_m;
+	float up_m;
+}
+
+struct lanewidth_t
+{
+    float driving_width_m;
+    float distance_along_seg_m; // also known as 'station distance'
+    float dist_to_left_edge_m;
+    float dist_to_right_edge_m;
+}
+
+struct laneflowrestriction_t
+{
+    int8_t lane_flow_restriction_type;  // one of eFlowRestriction
+    int8_t lane_connection_n;           // which connection (if any) hsd this restriction; set to 0 if in main segment part and not in the connection
+    float restriction_station_m;
+}
+
+struct connection_t	{
+	int64_t next_laneseg_uid;
+	int16_t next_lane_index;
+	float maneuver_start_heading_deg;
+	float maneuver_end_heading_deg;
+
+	int16_t connection_type; //eConnectionType
+	int16_t maneuver;//eConnectionManeuver
+	int16_t traffic_signal_phase;
+	int16_t point_count;
+	connection_points_t point[point_count];
+}
+
+struct connection_points_t
+{
+    float station_m;    // accumulated distance from start of segment (not start of connection)
+    float east_m;
+	float north_m;
+	float up_m;
+    float heading_deg;
+	float v_mps;
+	float curve_im;
+	float grade_rad;
+	float bank_rad;
+}

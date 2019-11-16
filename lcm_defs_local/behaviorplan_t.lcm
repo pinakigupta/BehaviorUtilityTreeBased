@@ -1,0 +1,72 @@
+package exlcm;
+
+
+
+
+struct behaviorplan_t
+{
+    	const int8_t VERSION_N = 4; // Increment for every structural changes for this LCM data type (i.e. when fingreprint changes)
+	int8_t valid_f;
+	int16_t rolling_count;	    // should increment with every publication; if part of a set, the message specific items should have something like 'frame_count'
+	double timestamp_sec;
+	int64_t ref_n;
+
+	int16_t master_state;//enum
+	int16_t state_goal;//enum
+	int16_t behavior_type;//
+	int8_t reroute_needed_f;
+	int8_t alternate_route_count;		
+	int8_t alternateroute_needed_f[alternate_route_count];	
+
+//      Lane keep related (also useful during lane change)
+	float speed_target_distance_current_lane_m;
+	float speed_target_current_lane_mps;
+	float accel_target_current_lane_mpss;
+	lanegap_t current_lane_ahead_gap;
+	lanegap_t current_lane_behind_gap;
+
+	int8_t acceleration_urgency; // longitudinal acceleration
+
+
+//      Lane change related
+	int16_t left_lane_intention;//enum
+	int16_t right_lane_intention;//enum
+//	float speed_target_distance_left_lane_m; // This is per lane not per gap 
+//	float speed_target_left_lane_mps; // This is per lane not per gap 
+//	float speed_target_distance_right_lane_m; // This is per lane not per gap 
+//	float speed_target_right_lane_mps; // This is per lane not per gap 
+	lanegap_t target_lane_gap; // At this point we know what is the target lane. Either left lane or right lane (for lane change), Merge Lane (for intersection or highway merging).
+
+
+
+}
+
+struct lanegappred_t
+{
+	float gap_time;
+	float gap_start_m;
+	float gap_end_m;
+	float gap_start_mps; // Velocity 
+	float gap_end_mps;
+	float gap_start_mpss; // Acceleration
+	float gap_end_mpss;
+}
+
+struct lanegap_t
+{
+	int8_t gap_UID; // Unique key to identfy which gap. Should be provided by Behavior.
+	int8_t gap_pred_count;
+	lanegappred_t gap_predictions[gap_pred_count];//A sequence of gap sizes from 0 to TBD sec for the concerned gap.
+	lanegappred_t optimal_predicted_gap;// Optimal time to merge into (as part of lane change, turn or merge maneuver) the gap, and the corresponding gap size.
+	float gap_occupancy_cost; // Normalized cost (0-1) for the HV to occupy this gap. If already occupying the gap this cost is 0. If gap can't be occupied cost is 1;
+	int8_t relevant_obj_count;
+	objdetails_t relevant_objs[3]; // contains at most two hypotheses (one ahead of the HV). Can't be of the same object. Two end of the gaps can be corresponding to static gap, i.e. there may be 1 or no hypotheses corrresponding to an actual object.
+}
+
+struct objdetails_t
+{
+	int32_t obj_ID;
+	int8_t lanesituation_index;
+	int8_t  objpred_idx;
+	float obj_dist;
+}

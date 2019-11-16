@@ -1,0 +1,19 @@
+package exlcm;
+// MAL 2017-04-26
+// PP  2017-08-30 : added VERSION_N
+
+struct visualizerstates_t
+{
+//  common elements
+    const int8_t VERSION_N = 2; // Increment for every structural changes for this LCM data type (i.e. when fingreprint changes)
+    int16_t  entity_type;           // = 36 for VisualizerNotification
+    int8_t   version_n;             // version number of data entity type
+    boolean  valid_f;               // whether author thinks entity is currently valid
+    int64_t  ref_n;                 // cookie used between user code and plumbing code
+    double   timestamp_sec;         // when authored (entire data structure, some sub-groups of data have their own timestamps)
+
+// unique data
+    boolean ClosedLoopEnabled;         // true when visualizer determines it is freeze frame state (for ex: based on pause of log data)
+    boolean FreezeFrameOnLogPlayerPause; // true when visuaLizer feezes its view based on its perception of logplayer pause.
+
+}
